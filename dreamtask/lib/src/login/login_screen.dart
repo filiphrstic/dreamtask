@@ -1,51 +1,69 @@
+import 'package:dreamtask/src/login/registration_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../settings/settings_view.dart';
 
 /// Displays a list of SampleItems.
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({
+  LoginScreen({
     super.key,
   });
 
   static const routeName = '/login';
 
+  final loginUsernameController = TextEditingController();
+  final loginPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-        ),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Login'),
+          ),
 
-        // To work with lists that may contain a large number of items, it’s best
-        // to use the ListView.builder constructor.
-        //
-        // In contrast to the default ListView constructor, which requires
-        // building all Widgets up front, the ListView.builder constructor lazily
-        // builds Widgets as they’re scrolled into view.
-        body: Form(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(hintText: 'username'),
+          // To work with lists that may contain a large number of items, it’s best
+          // to use the ListView.builder constructor.
+          //
+          // In contrast to the default ListView constructor, which requires
+          // building all Widgets up front, the ListView.builder constructor lazily
+          // builds Widgets as they’re scrolled into view.
+          body: Form(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: TextFormField(
+                      controller: loginUsernameController,
+                      decoration: const InputDecoration(hintText: 'username'),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(hintText: 'password'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: TextFormField(
+                      controller: loginPasswordController,
+                      decoration: const InputDecoration(hintText: 'password'),
+                    ),
                   ),
-                ),
-                ElevatedButton(onPressed: () {}, child: Text('Log in')),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text('Don\'t have an account?'),
-                  TextButton(onPressed: () {}, child: Text('Register'))
+                  ElevatedButton(
+                      onPressed: () {
+                        print(loginUsernameController.text +
+                            " " +
+                            loginPasswordController.text);
+                      },
+                      child: const Text('Log in')),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    const Text('Don\'t have an account?'),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.popAndPushNamed(
+                              context, RegistrationScreen.routeName);
+                        },
+                        child: const Text('Register'))
+                  ]),
                 ]),
-              ]),
-        ));
+          )),
+    );
   }
 }

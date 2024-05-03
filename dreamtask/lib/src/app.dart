@@ -1,4 +1,5 @@
 import 'package:dreamtask/src/login/login_screen.dart';
+import 'package:dreamtask/src/login/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -74,8 +75,12 @@ class MyApp extends StatelessWidget {
                     return const SampleItemDetailsView();
                   case SampleItemListView.routeName:
                     return const SampleItemListView();
+                  case RegistrationScreen.routeName:
+                    return RegistrationScreen();
+                  case LoginScreen.routeName:
+                    return LoginScreen();
                   default:
-                    return const LoginScreen();
+                    return LoginScreen();
                 }
               },
             );
