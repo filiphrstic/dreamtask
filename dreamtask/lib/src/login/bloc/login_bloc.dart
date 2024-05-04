@@ -34,12 +34,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         emit(LoginLoading());
         Response response = await dio.post(
-            'https://tictactoe.aboutdream.io/login/',
-            data: {'username': event.username, 'password': event.password});
+          'https://tictactoe.aboutdream.io/login/',
+          data: {'username': event.username, 'password': event.password},
+        );
         if (response.statusCode == 200) {
           emit(SuccessfulLoginState(response.data));
-        } else {
-          emit(ErrorLoginState('Error, status code: ${response.statusCode}'));
+        }
+      } catch (e) {
+        emit(ErrorLoginState(e.toString()));
+        print(e);
+      }
+    });
+
+    on<UserRegistrationEvent>((event, emit) async {
+      try {
+        emit(LoginLoading());
+        Response response = await dio.post(
+          'https://tictactoe.aboutdream.io/register/',
+          data: {'username': event.username, 'password': event.password},
+        );
+        if (response.statusCode == 200) {
+          emit(SuccessfulRegistrationState());
         }
       } catch (e) {
         emit(ErrorLoginState(e.toString()));

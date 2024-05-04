@@ -13,6 +13,10 @@ class SuccessfulLoginState extends LoginState {
   SuccessfulLoginState(this.loginResponse);
 }
 
+class SuccessfulRegistrationState extends LoginState {
+  SuccessfulRegistrationState();
+}
+
 class ErrorLoginState extends LoginState {
   final String loginError;
 

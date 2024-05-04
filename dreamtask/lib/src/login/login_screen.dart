@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login';
-  LoginScreen({
+  const LoginScreen({
     super.key,
   });
 
@@ -54,15 +54,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           return Text('initial');
                         }
                         if (state is LoginLoading) {
-                          // return CircularProgressIndicator();
-                          return Text('loading');
+                          return CircularProgressIndicator();
+                          // return Text('loading');
                         }
                         if (state is SuccessfulLoginState) {
                           return Text('Login successfull' +
                               state.loginResponse.toString());
                         }
                         if (state is ErrorLoginState) {
-                          return Text(state.loginError);
+                          return Text('Error: ${state.loginError}');
+                          // return Text()
                         } else
                           return Text('Unhandled state');
                       }),

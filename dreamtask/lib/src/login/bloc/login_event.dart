@@ -9,3 +9,10 @@ class UserLoginEvent extends LoginEvent {
 
   UserLoginEvent(this.username, this.password);
 }
+
+class UserRegistrationEvent extends LoginEvent {
+  final String username;
+  final String password;
+
+  UserRegistrationEvent(this.username, this.password);
+}
