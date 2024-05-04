@@ -1,3 +1,4 @@
+import 'package:dreamtask/src/games_screen.dart';
 import 'package:dreamtask/src/login/bloc/login_bloc.dart';
 import 'package:dreamtask/src/login/registration_screen.dart';
 import 'package:flutter/material.dart';
@@ -47,25 +48,31 @@ class _LoginScreenState extends State<LoginScreen> {
                   BlocProvider(
                     create: (context) => loginBloc,
                     child: BlocListener<LoginBloc, LoginState>(
-                      listener: (context, state) {},
+                      listener: (context, state) {
+                        if (state is SuccessfulLoginState) {
+                          Navigator.popAndPushNamed(
+                              context, GamesScreen.routeName);
+                        }
+                      },
                       child: BlocBuilder<LoginBloc, LoginState>(
                           builder: (context, state) {
                         if (state is LoginInitial) {
-                          return Text('initial');
+                          return const Text('initial');
                         }
                         if (state is LoginLoading) {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                           // return Text('loading');
                         }
                         if (state is SuccessfulLoginState) {
-                          return Text('Login successfull' +
-                              state.loginResponse.toString());
+                          return Text(
+                              'Login successfull ${state.loginResponse}');
                         }
                         if (state is ErrorLoginState) {
                           return Text('Error: ${state.loginError}');
                           // return Text()
-                        } else
-                          return Text('Unhandled state');
+                        } else {
+                          return const Text('Unhandled state');
+                        }
                       }),
                     ),
                   ),

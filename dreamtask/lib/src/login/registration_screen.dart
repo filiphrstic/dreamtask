@@ -50,30 +50,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       child: BlocBuilder<LoginBloc, LoginState>(
                           builder: (context, state) {
                         if (state is LoginInitial) {
-                          return Text('initial');
+                          return const Text('initial');
                         }
                         if (state is LoginLoading) {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                           // return Text('loading');
                         }
                         if (state is SuccessfulRegistrationState) {
                           return Column(
                             children: [
-                              Text('Registration successfull'),
+                              const Text('Registration successfull'),
                               TextButton(
                                   onPressed: () {
                                     Navigator.popAndPushNamed(
                                         context, LoginScreen.routeName);
                                   },
-                                  child: Text('Please log in'))
+                                  child: const Text('Please log in'))
                             ],
                           );
                         }
                         if (state is ErrorLoginState) {
                           return Text('Error: ${state.loginError}');
                           // return Text()
-                        } else
-                          return Text('Unhandled state');
+                        } else {
+                          return const Text('Unhandled state');
+                        }
                       }),
                     ),
                   ),

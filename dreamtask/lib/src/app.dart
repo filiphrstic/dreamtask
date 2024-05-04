@@ -1,8 +1,7 @@
-import 'package:dreamtask/src/login/bloc/login_bloc.dart';
+import 'package:dreamtask/src/games_screen.dart';
 import 'package:dreamtask/src/login/login_screen.dart';
 import 'package:dreamtask/src/login/registration_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -78,11 +77,13 @@ class MyApp extends StatelessWidget {
                   case SampleItemListView.routeName:
                     return const SampleItemListView();
                   case RegistrationScreen.routeName:
-                    return RegistrationScreen();
+                    return const RegistrationScreen();
                   case LoginScreen.routeName:
-                    return LoginScreen();
+                    return const LoginScreen();
+                  case GamesScreen.routeName:
+                    return const GamesScreen();
                   default:
-                    return LoginScreen();
+                    return const LoginScreen();
                 }
               },
             );
