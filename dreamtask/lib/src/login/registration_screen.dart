@@ -47,12 +47,7 @@ class RegistrationScreen extends StatelessWidget {
                     ),
                   ),
                   ElevatedButton(
-                      onPressed: () {
-                        print(registrationUsernameController.text +
-                            " " +
-                            registrationPasswordController.text);
-                      },
-                      child: const Text('Register')),
+                      onPressed: () {}, child: const Text('Register')),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     const Text('Already have an account?'),
                     TextButton(

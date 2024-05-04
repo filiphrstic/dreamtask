@@ -1,19 +1,31 @@
+import 'package:dreamtask/src/login/bloc/login_bloc.dart';
 import 'package:dreamtask/src/login/registration_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// Displays a list of SampleItems.
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  static const routeName = '/login';
   LoginScreen({
     super.key,
   });
 
-  static const routeName = '/login';
+  @override
+  State<StatefulWidget> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   final loginUsernameController = TextEditingController();
   final loginPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final loginBloc = LoginBloc();
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -32,6 +44,30 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  BlocProvider(
+                    create: (context) => loginBloc,
+                    child: BlocListener<LoginBloc, LoginState>(
+                      listener: (context, state) {},
+                      child: BlocBuilder<LoginBloc, LoginState>(
+                          builder: (context, state) {
+                        if (state is LoginInitial) {
+                          return Text('initial');
+                        }
+                        if (state is LoginLoading) {
+                          // return CircularProgressIndicator();
+                          return Text('loading');
+                        }
+                        if (state is SuccessfulLoginState) {
+                          return Text('Login successfull' +
+                              state.loginResponse.toString());
+                        }
+                        if (state is ErrorLoginState) {
+                          return Text(state.loginError);
+                        } else
+                          return Text('Unhandled state');
+                      }),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: TextFormField(
@@ -48,9 +84,9 @@ class LoginScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                       onPressed: () {
-                        print(loginUsernameController.text +
-                            " " +
-                            loginPasswordController.text);
+                        loginBloc.add(UserLoginEvent(
+                            loginUsernameController.text,
+                            loginPasswordController.text));
                       },
                       child: const Text('Log in')),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
