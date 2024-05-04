@@ -1,4 +1,4 @@
-import 'package:dreamtask/src/games_screen.dart';
+import 'package:dreamtask/src/games/games_screen.dart';
 import 'package:dreamtask/src/login/bloc/login_bloc.dart';
 import 'package:dreamtask/src/login/registration_screen.dart';
 import 'package:flutter/material.dart';

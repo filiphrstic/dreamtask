@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -10,28 +8,7 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final Dio dio = Dio();
-  final secureStorage = FlutterSecureStorage();
-
-  // LoginState get loginInitial => LoginInitial();
-
-  // Stream<LoginState> mapEventToState(LoginEvent event) async* {
-  //   if (event is UserLoginEvent) {
-  //     yield LoginInitial();
-
-  //     try {
-  //       Response response = await dio.post(
-  //           'https://tictactoe.aboutdream.io/login/',
-  //           data: {'username': event.username, 'password': event.password});
-  //       if (response.statusCode == 200) {
-  //         yield SuccessfulLoginState(response.data);
-  //       } else {
-  //         yield ErrorLoginState('Error, status code: ${response.statusCode}');
-  //       }
-  //     } catch (e) {
-  //       yield ErrorLoginState('Error: $e');
-  //     }
-  //   }
-  // }
+  final secureStorage = const FlutterSecureStorage();
 
   LoginBloc() : super(LoginInitial()) {
     on<UserLoginEvent>((event, emit) async {
@@ -41,8 +18,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           'https://tictactoe.aboutdream.io/login/',
           data: {'username': event.username, 'password': event.password},
         );
-        secureStorage.write(key: 'token', value: response.data['token']);
-        print(response.data['token']);
+        await secureStorage.write(key: 'token', value: response.data['token']);
+        // print(response.data['token']);
 
         // var responseMap = json.decode(response.data);
         // print(responseMap);
