@@ -12,13 +12,19 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
 
   final secureStorage = const FlutterSecureStorage();
   GamesBloc() : super(GamesInitial()) {
+    String fetchGamesUrl = 'https://tictactoe.aboutdream.io/games/';
+
     on<FetchGamesEvent>((event, emit) async {
+      if (event.fetchGamesUrl.isNotEmpty) {
+        fetchGamesUrl = event.fetchGamesUrl;
+      } else {
+        fetchGamesUrl = 'https://tictactoe.aboutdream.io/games/';
+      }
       try {
         emit(GamesLoading());
         var authToken = await secureStorage.read(key: 'token');
-        // print(authToken.toString());
         final response = await dio.get(
-          'https://tictactoe.aboutdream.io/games/',
+          fetchGamesUrl,
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -29,14 +35,10 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         if (response.statusCode == 200) {
           GamesResponseModel gamesResponseModel =
               GamesResponseModel.fromJSON(response.data);
-          // gamesResponseModel.populateGamesList();
-          // List<GameModel> listOfGames;
-          // GameModel gameModel = GameModel.fromJSON(response.data['results'][0]);
           emit(SuccessfulGamesState(gamesResponseModel));
         }
       } catch (e) {
         emit(ErrorGamesState(e.toString()));
-        // print(e);
       }
     });
   }

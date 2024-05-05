@@ -22,11 +22,9 @@ class _GamesScreenState extends State<GamesScreen> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           ElevatedButton(
               onPressed: () {
-                gamesBloc.add(FetchGamesEvent());
+                gamesBloc.add(FetchGamesEvent(''));
               },
               child: const Text('Create new game')),
-          // Text('Token: ' + storage.read(key: 'token').toString())
-
           BlocProvider(
             create: (context) => gamesBloc,
             child: BlocListener<GamesBloc, GamesState>(
@@ -47,15 +45,19 @@ class _GamesScreenState extends State<GamesScreen> {
                                   ? Container()
                                   : ElevatedButton(
                                       onPressed: () {
-                                        gamesBloc.add(FetchGamesEvent());
+                                        gamesBloc.add(FetchGamesEvent(
+                                            state.gamesResponse.previous));
                                       },
                                       child: const Text('Previous')),
                               const Spacer(),
-                              ElevatedButton(
-                                  onPressed: () {
-                                    gamesBloc.add(FetchGamesEvent());
-                                  },
-                                  child: const Text('Next')),
+                              (state.gamesResponse.next.isEmpty)
+                                  ? Container()
+                                  : ElevatedButton(
+                                      onPressed: () {
+                                        gamesBloc.add(FetchGamesEvent(
+                                            state.gamesResponse.next));
+                                      },
+                                      child: const Text('Next')),
                             ],
                           ),
                         ),
@@ -70,13 +72,12 @@ class _GamesScreenState extends State<GamesScreen> {
                       ],
                     );
                   } else {
-                    return const Text('Unhandled state');
+                    return Container();
                   }
                 },
               ),
             ),
           ),
-
           BlocProvider(
             create: (context) => gamesBloc,
             child: BlocListener<GamesBloc, GamesState>(
@@ -84,7 +85,7 @@ class _GamesScreenState extends State<GamesScreen> {
               child: BlocBuilder<GamesBloc, GamesState>(
                 builder: (context, state) {
                   if (state is GamesInitial) {
-                    gamesBloc.add(FetchGamesEvent());
+                    gamesBloc.add(FetchGamesEvent(''));
                     return const Text('initial');
                   }
                   if (state is GamesLoading) {
@@ -93,8 +94,6 @@ class _GamesScreenState extends State<GamesScreen> {
                   if (state is SuccessfulGamesState) {
                     return GamesListWidget(
                         gamesList: state.gamesResponse.gamesList);
-                    // return Text(state.gamesResponse.count.toString() +
-                    //     state.gamesResponse.gamesList[0].id.toString());
                   }
                   if (state is ErrorGamesState) {
                     return Text(state.gamesError);
