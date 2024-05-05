@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:dreamtask/src/games/game_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 
@@ -26,7 +27,9 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         );
 
         if (response.statusCode == 200) {
-          emit(SuccessfulGamesState(response.data));
+          // List<GameModel> listOfGames;
+          GameModel gameModel = GameModel.fromJSON(response.data['results'][0]);
+          emit(SuccessfulGamesState(gameModel));
         }
       } catch (e) {
         emit(ErrorGamesState(e.toString()));

@@ -8,7 +8,7 @@ final class GamesInitial extends GamesState {}
 final class GamesLoading extends GamesState {}
 
 final class SuccessfulGamesState extends GamesState {
-  final dynamic gamesResponse;
+  final GameModel gamesResponse;
 
   SuccessfulGamesState(this.gamesResponse);
 }

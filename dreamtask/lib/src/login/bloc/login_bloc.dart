@@ -41,10 +41,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           data: {'username': event.username, 'password': event.password},
         );
         if (response.statusCode == 200) {
-          emit(SuccessfulRegistrationState());
+          emit(
+            SuccessfulRegistrationState(),
+          );
         }
       } catch (e) {
-        emit(ErrorLoginState(e.toString()));
+        emit(
+          ErrorLoginState(
+            e.toString(),
+          ),
+        );
         // print(e);
       }
     });

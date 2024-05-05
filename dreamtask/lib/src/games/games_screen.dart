@@ -33,13 +33,15 @@ class _GamesScreenState extends State<GamesScreen> {
               child: BlocBuilder<GamesBloc, GamesState>(
                 builder: (context, state) {
                   if (state is GamesInitial) {
+                    gamesBloc.add(FetchGamesEvent());
                     return Text('initial');
                   }
                   if (state is GamesLoading) {
                     return CircularProgressIndicator();
                   }
                   if (state is SuccessfulGamesState) {
-                    return Text(state.gamesResponse.toString());
+                    return Text(state.gamesResponse.id.toString() +
+                        state.gamesResponse.status);
                   }
                   if (state is ErrorGamesState) {
                     return Text(state.gamesError);
