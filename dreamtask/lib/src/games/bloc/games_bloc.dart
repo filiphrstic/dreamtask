@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:dreamtask/src/games/game_model.dart';
 import 'package:dreamtask/src/games/games_reponse_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
@@ -17,7 +16,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
       try {
         emit(GamesLoading());
         var authToken = await secureStorage.read(key: 'token');
-        print(authToken.toString());
+        // print(authToken.toString());
         final response = await dio.get(
           'https://tictactoe.aboutdream.io/games/',
           options: Options(headers: {

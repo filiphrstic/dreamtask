@@ -1,4 +1,5 @@
 import 'package:dreamtask/src/games/bloc/games_bloc.dart';
+import 'package:dreamtask/src/games/game_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,16 +33,68 @@ class _GamesScreenState extends State<GamesScreen> {
               listener: (context, state) {},
               child: BlocBuilder<GamesBloc, GamesState>(
                 builder: (context, state) {
+                  if (state is SuccessfulGamesState) {
+                    int lastResultIndex = int.parse(state.gamesResponse.next
+                        .substring(state.gamesResponse.next.length - 2));
+                    int firstResultIndex = lastResultIndex - 10;
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              (state.gamesResponse.previous.isEmpty)
+                                  ? Container()
+                                  : ElevatedButton(
+                                      onPressed: () {
+                                        gamesBloc.add(FetchGamesEvent());
+                                      },
+                                      child: const Text('Previous')),
+                              const Spacer(),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    gamesBloc.add(FetchGamesEvent());
+                                  },
+                                  child: const Text('Next')),
+                            ],
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                'Showing $firstResultIndex-$lastResultIndex of ${state.gamesResponse.count} total'),
+                          ),
+                        )
+                      ],
+                    );
+                  } else {
+                    return const Text('Unhandled state');
+                  }
+                },
+              ),
+            ),
+          ),
+
+          BlocProvider(
+            create: (context) => gamesBloc,
+            child: BlocListener<GamesBloc, GamesState>(
+              listener: (context, state) {},
+              child: BlocBuilder<GamesBloc, GamesState>(
+                builder: (context, state) {
                   if (state is GamesInitial) {
                     gamesBloc.add(FetchGamesEvent());
-                    return Text('initial');
+                    return const Text('initial');
                   }
                   if (state is GamesLoading) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                   if (state is SuccessfulGamesState) {
-                    return Text(state.gamesResponse.count.toString() +
-                        state.gamesResponse.gamesList[0].id.toString());
+                    return GamesListWidget(
+                        gamesList: state.gamesResponse.gamesList);
+                    // return Text(state.gamesResponse.count.toString() +
+                    //     state.gamesResponse.gamesList[0].id.toString());
                   }
                   if (state is ErrorGamesState) {
                     return Text(state.gamesError);
@@ -60,6 +113,45 @@ class _GamesScreenState extends State<GamesScreen> {
           BottomNavigationBarItem(
               icon: Icon(Icons.format_list_numbered), label: 'Rank list')
         ],
+      ),
+    );
+  }
+}
+
+class GamesListWidget extends StatelessWidget {
+  final List<GameModel> gamesList;
+  const GamesListWidget({super.key, required this.gamesList});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return GameCard(game: gamesList[index]);
+        },
+      ),
+    );
+  }
+}
+
+class GameCard extends StatelessWidget {
+  final GameModel game;
+  const GameCard({super.key, required this.game});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: SizedBox(
+        height: 75.0,
+        child: Column(
+          children: [
+            Text(game.id.toString()),
+            Text(game.status),
+            Text(game.created),
+          ],
+        ),
       ),
     );
   }
