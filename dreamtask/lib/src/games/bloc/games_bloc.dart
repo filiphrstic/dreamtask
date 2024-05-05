@@ -11,9 +11,8 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
   final Dio dio = Dio(BaseOptions());
 
   final secureStorage = const FlutterSecureStorage();
+  String fetchGamesUrl = 'https://tictactoe.aboutdream.io/games/';
   GamesBloc() : super(GamesInitial()) {
-    String fetchGamesUrl = 'https://tictactoe.aboutdream.io/games/';
-
     on<FetchGamesEvent>((event, emit) async {
       if (event.fetchGamesUrl.isNotEmpty) {
         fetchGamesUrl = event.fetchGamesUrl;

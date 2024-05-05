@@ -31,13 +31,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           appBar: AppBar(
             title: const Text('Registration'),
           ),
-
-          // To work with lists that may contain a large number of items, it’s best
-          // to use the ListView.builder constructor.
-          //
-          // In contrast to the default ListView constructor, which requires
-          // building all Widgets up front, the ListView.builder constructor lazily
-          // builds Widgets as they’re scrolled into view.
           body: Form(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +47,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         }
                         if (state is LoginLoading) {
                           return const CircularProgressIndicator();
-                          // return Text('loading');
                         }
                         if (state is SuccessfulRegistrationState) {
                           return Column(
@@ -71,7 +63,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         }
                         if (state is ErrorLoginState) {
                           return Text('Error: ${state.loginError}');
-                          // return Text()
                         } else {
                           return const Text('Unhandled state');
                         }

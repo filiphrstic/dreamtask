@@ -18,7 +18,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           'https://tictactoe.aboutdream.io/login/',
           data: {'username': event.username, 'password': event.password},
         );
-        await secureStorage.write(key: 'token', value: response.data['token']);
+        await secureStorage.write(
+          key: 'token',
+          value: response.data['token'],
+        );
+        await secureStorage.write(
+          key: 'username',
+          value: response.data['username'],
+        );
+        await secureStorage.write(
+          key: 'id',
+          value: response.data['id'],
+        );
         // print(response.data['token']);
 
         // var responseMap = json.decode(response.data);

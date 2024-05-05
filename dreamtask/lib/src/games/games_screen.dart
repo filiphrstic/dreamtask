@@ -12,6 +12,7 @@ class GamesScreen extends StatefulWidget {
 }
 
 class _GamesScreenState extends State<GamesScreen> {
+  var selectedStatus = 'open';
   final gamesBloc = GamesBloc();
   @override
   Widget build(BuildContext context) {
@@ -32,9 +33,9 @@ class _GamesScreenState extends State<GamesScreen> {
               child: BlocBuilder<GamesBloc, GamesState>(
                 builder: (context, state) {
                   if (state is SuccessfulGamesState) {
-                    int lastResultIndex = int.parse(state.gamesResponse.next
-                        .substring(state.gamesResponse.next.length - 2));
-                    int firstResultIndex = lastResultIndex - 10;
+                    // int lastResultIndex = int.parse(state.gamesResponse.next
+                    //     .substring(state.gamesResponse.next.length - 2));
+                    // int firstResultIndex = lastResultIndex - 10;
                     return Column(
                       children: [
                         Padding(
@@ -61,12 +62,48 @@ class _GamesScreenState extends State<GamesScreen> {
                             ],
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                'Showing $firstResultIndex-$lastResultIndex of ${state.gamesResponse.count} total'),
+                        // Align(
+                        //   alignment: Alignment.centerLeft,
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.all(8.0),
+                        //     child: Text(
+                        //         'Showing $firstResultIndex-$lastResultIndex of ${state.gamesResponse.count} total'),
+                        //   ),
+                        // )
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              // Text(
+                              //     'Showing $firstResultIndex-$lastResultIndex of ${state.gamesResponse.count} total'),
+                              const Spacer(),
+                              DropdownButton(
+                                value: selectedStatus,
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: 'open',
+                                    child: Text('open'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'progress',
+                                    child: Text('progress'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'finished',
+                                    child: Text('finished'),
+                                  )
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedStatus = value!;
+
+                                    gamesBloc.add(FetchGamesEvent(
+                                        'https://tictactoe.aboutdream.io/games/?status=' +
+                                            value));
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         )
                       ],
@@ -126,7 +163,7 @@ class GamesListWidget extends StatelessWidget {
     return Expanded(
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: 10,
+        itemCount: gamesList.length,
         itemBuilder: (context, index) {
           return GameCard(game: gamesList[index]);
         },
