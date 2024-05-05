@@ -16,16 +16,12 @@ class GameModel {
       required this.created,
       required this.status});
 
-  factory GameModel.fromJSON(Map<String, dynamic> json) => new GameModel(
-      id: json['id'] == null ? 0 : json['id'],
-      board: json['board'] == null ? [0] : json['board'],
-      winner: json['winner'] == null ? {'winner': 0} : json['winner'],
-      firstPlayer: json['first_player'] == {'first_player': 0}
-          ? null
-          : json['first_player'],
-      secondPlayer: json['second_player'] == null
-          ? {'second_player': 0}
-          : json['second_player'],
-      created: json['created'] == null ? 'null' : json['created'],
-      status: json['status'] == null ? 'null' : json['status']);
+  factory GameModel.fromJSON(Map<String, dynamic> json) => GameModel(
+      id: json['id'] ?? 0,
+      board: json['board'] ?? [0],
+      winner: json['winner'] ?? {'winner': 0},
+      firstPlayer: json['first_player'] ?? {'first_player': 0},
+      secondPlayer: json['second_player'] ?? {'second_player': 0},
+      created: json['created'] ?? 'null',
+      status: json['status'] ?? 'null');
 }

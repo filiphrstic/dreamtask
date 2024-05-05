@@ -40,8 +40,8 @@ class _GamesScreenState extends State<GamesScreen> {
                     return CircularProgressIndicator();
                   }
                   if (state is SuccessfulGamesState) {
-                    return Text(state.gamesResponse.id.toString() +
-                        state.gamesResponse.status);
+                    return Text(state.gamesResponse.count.toString() +
+                        state.gamesResponse.gamesList[0].id.toString());
                   }
                   if (state is ErrorGamesState) {
                     return Text(state.gamesError);
