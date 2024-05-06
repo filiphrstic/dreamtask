@@ -9,8 +9,9 @@ final class GamesLoading extends GamesState {}
 
 final class SuccessfulGamesState extends GamesState {
   final GamesResponseModel gamesResponse;
+  final int id;
 
-  SuccessfulGamesState(this.gamesResponse);
+  SuccessfulGamesState(this.gamesResponse, this.id);
 }
 
 // final class SuccessfulCreateNewGameState extends GamesState {}

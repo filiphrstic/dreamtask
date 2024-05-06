@@ -86,8 +86,8 @@ class MyApp extends StatelessWidget {
                   case GameDetailsScreen.routeName:
                     return const GameDetailsScreen();
                   default:
-                    // return const LoginScreen();
-                    return const GamesScreen();
+                    return const LoginScreen();
+                  // return const GamesScreen();
                 }
               },
             );

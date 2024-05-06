@@ -14,6 +14,9 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
   String gamesEndpoint = 'https://tictactoe.aboutdream.io/games/';
   GamesBloc() : super(GamesInitial()) {
     on<FetchGamesEvent>((event, emit) async {
+      // var username = await secureStorage.read(key: 'username');
+      String id = await secureStorage.read(key: 'id') ?? "0";
+
       if (event.gamesEndpoint.isNotEmpty) {
         gamesEndpoint = event.gamesEndpoint;
       } else {
@@ -27,15 +30,15 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            // 'Authorization': 'Bearer $authToken',
-            'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
+            'Authorization': 'Bearer $authToken',
+            // 'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
           }),
         );
 
         if (response.statusCode == 200) {
           GamesResponseModel gamesResponseModel =
               GamesResponseModel.fromJSON(response.data);
-          emit(SuccessfulGamesState(gamesResponseModel));
+          emit(SuccessfulGamesState(gamesResponseModel, int.parse(id)));
         }
       } catch (e) {
         emit(ErrorGamesState(e.toString()));
@@ -46,13 +49,15 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
       try {
         // emit(GamesLoading());
         var authToken = await secureStorage.read(key: 'token');
-        final response = await dio.post(
+        // var firstPlayer = await secureStorage.read(key: 'username');
+        // print(firstPlayer.toString());
+        await dio.post(
           gamesEndpoint,
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            // 'Authorization': 'Bearer $authToken',
-            'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
+            'Authorization': 'Bearer $authToken',
+            // 'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
           }),
         );
         // if (response.statusCode == 200) {

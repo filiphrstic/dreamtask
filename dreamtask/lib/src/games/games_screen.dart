@@ -138,7 +138,9 @@ class _GamesScreenState extends State<GamesScreen> {
                   }
                   if (state is SuccessfulGamesState) {
                     return GamesListWidget(
-                        gamesList: state.gamesResponse.gamesList);
+                      gamesList: state.gamesResponse.gamesList,
+                      userId: state.id,
+                    );
                   }
                   if (state is ErrorGamesState) {
                     return Text(state.gamesError);
@@ -164,7 +166,9 @@ class _GamesScreenState extends State<GamesScreen> {
 
 class GamesListWidget extends StatelessWidget {
   final List<GameModel> gamesList;
-  const GamesListWidget({super.key, required this.gamesList});
+  final int userId;
+  const GamesListWidget(
+      {super.key, required this.gamesList, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +177,10 @@ class GamesListWidget extends StatelessWidget {
         shrinkWrap: true,
         itemCount: gamesList.length,
         itemBuilder: (context, index) {
-          return GameCard(game: gamesList[index]);
+          return GameCard(
+            game: gamesList[index],
+            userId: userId,
+          );
         },
       ),
     );
@@ -182,7 +189,8 @@ class GamesListWidget extends StatelessWidget {
 
 class GameCard extends StatelessWidget {
   final GameModel game;
-  const GameCard({super.key, required this.game});
+  final int userId;
+  const GameCard({super.key, required this.game, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -199,6 +207,12 @@ class GameCard extends StatelessWidget {
               Text(game.id.toString()),
               Text(game.status),
               Text(game.created),
+              (userId == game.firstPlayer['id'])
+                  ? const Text('You have created this game')
+                  : Container(),
+              (userId == game.secondPlayer['id'])
+                  ? const Text('You are playing this game')
+                  : Container()
             ],
           ),
         ),
