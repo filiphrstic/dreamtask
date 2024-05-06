@@ -24,6 +24,9 @@ final class ErrorGamesState extends GamesState {
 
 final class SuccessfulCurrentGameDetails extends GamesState {
   final GameModel currentGameResponse;
+  final int currentPlayerId;
 
-  SuccessfulCurrentGameDetails(this.currentGameResponse);
+  SuccessfulCurrentGameDetails(this.currentGameResponse, this.currentPlayerId);
 }
+
+final class SuccessfulMakeMove extends GamesState {}

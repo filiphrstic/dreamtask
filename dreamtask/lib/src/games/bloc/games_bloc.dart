@@ -70,6 +70,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     });
 
     on<FetchCurrentGameDetails>((event, emit) async {
+      String currentPlayerId = await secureStorage.read(key: 'id') ?? "0";
       try {
         emit(GamesLoading());
         var authToken = await secureStorage.read(key: 'token');
@@ -88,7 +89,59 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         );
         if (response.statusCode == 200) {
           GameModel currentGameModel = GameModel.fromJSON(response.data);
-          emit(SuccessfulCurrentGameDetails(currentGameModel));
+          emit(SuccessfulCurrentGameDetails(
+              currentGameModel, int.parse(currentPlayerId)));
+        }
+      } catch (e) {
+        emit(ErrorGamesState(e.toString()));
+      }
+    });
+
+    on<MakeMoveEvent>((event, emit) async {
+      // String currentPlayerId = await secureStorage.read(key: 'id') ?? "0";
+      try {
+        emit(GamesLoading());
+        var authToken = await secureStorage.read(key: 'token');
+        final currentGameEndpoint = '$gamesEndpoint${event.gameId}/move/';
+        final response = await dio.post(
+          currentGameEndpoint,
+          data: event.params,
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $authToken',
+              // 'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
+            },
+          ),
+        );
+        if (response.statusCode == 200) {
+          add(FetchCurrentGameDetails(event.gameId));
+        }
+      } catch (e) {
+        emit(ErrorGamesState(e.toString()));
+      }
+    });
+
+    on<JoinGameEvent>((event, emit) async {
+      // String currentPlayerId = await secureStorage.read(key: 'id') ?? "0";
+      try {
+        emit(GamesLoading());
+        var authToken = await secureStorage.read(key: 'token');
+        final currentGameEndpoint = '$gamesEndpoint${event.gameId}/join/';
+        final response = await dio.post(
+          currentGameEndpoint,
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $authToken',
+              // 'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
+            },
+          ),
+        );
+        if (response.statusCode == 200) {
+          add(FetchCurrentGameDetails(event.gameId));
         }
       } catch (e) {
         emit(ErrorGamesState(e.toString()));

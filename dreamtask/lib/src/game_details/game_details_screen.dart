@@ -35,13 +35,18 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                 gamesBloc.add(FetchCurrentGameDetails(gameId));
                 return const Text('initial');
               } else if (state is GamesLoading) {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               } else if (state is SuccessfulCurrentGameDetails) {
                 GameModel game = state.currentGameResponse;
                 List<dynamic> boardList =
                     game.board[0] + game.board[1] + game.board[2];
                 int firstPlayerId = game.firstPlayer['id'];
                 int secondPlayerId = game.secondPlayer['id'] ?? 0;
+                List numberOfMoves = boardList
+                    .where(
+                      (element) => element != null,
+                    )
+                    .toList();
                 return Align(
                   alignment: Alignment.topCenter,
                   child: Column(
@@ -78,76 +83,42 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                       style: TextStyle(fontSize: 35),
                                     )),
                                   );
+                                } else if (boardList[index] == null &&
+                                    firstPlayerId == state.currentPlayerId &&
+                                    numberOfMoves.length.isEven) {
+                                  return InkWell(
+                                    onTap: () {
+                                      Map<String, dynamic>
+                                          paramsForRequestBody =
+                                          getCoordinatesFromIndex(index);
+                                      gamesBloc.add(MakeMoveEvent(
+                                          gameId, paramsForRequestBody));
+                                    },
+                                    child: Container(
+                                      color: Colors.green,
+                                    ),
+                                  );
                                 } else {
                                   return Container(
                                     color: Colors.white,
                                   );
                                 }
                               },
-                            )
-                            // GridView.count(
-                            //   crossAxisCount: 3,
-                            //   children: [
-                            //     Container(
-                            //       decoration: const BoxDecoration(
-                            //           border: Border(
-                            //               right: BorderSide(color: Colors.blue, width: 2.0),
-                            //               bottom:
-                            //                   BorderSide(color: Colors.blue, width: 2.0))),
-                            //     ),
-                            //     Container(
-                            //       decoration: const BoxDecoration(
-                            //           border: Border(
-                            //               right: BorderSide(color: Colors.blue, width: 2.0),
-                            //               bottom:
-                            //                   BorderSide(color: Colors.blue, width: 2.0))),
-                            //     ),
-                            //     Container(
-                            //       decoration: const BoxDecoration(
-                            //           border: Border(
-                            //               bottom:
-                            //                   BorderSide(color: Colors.blue, width: 2.0))),
-                            //     ),
-                            //     Container(
-                            //       decoration: const BoxDecoration(
-                            //           border: Border(
-                            //               right: BorderSide(color: Colors.blue, width: 2.0),
-                            //               bottom:
-                            //                   BorderSide(color: Colors.blue, width: 2.0))),
-                            //     ),
-                            //     Container(
-                            //       decoration: const BoxDecoration(
-                            //           border: Border(
-                            //               right: BorderSide(color: Colors.blue, width: 2.0),
-                            //               bottom:
-                            //                   BorderSide(color: Colors.blue, width: 2.0))),
-                            //     ),
-                            //     Container(
-                            //       decoration: const BoxDecoration(
-                            //           border: Border(
-                            //               bottom:
-                            //                   BorderSide(color: Colors.blue, width: 2.0))),
-                            //     ),
-                            //     Container(
-                            //       decoration: const BoxDecoration(
-                            //           border: Border(
-                            //         right: BorderSide(color: Colors.blue, width: 2.0),
-                            //       )),
-                            //     ),
-                            //     Container(
-                            //       decoration: const BoxDecoration(
-                            //           border: Border(
-                            //         right: BorderSide(color: Colors.blue, width: 2.0),
-                            //       )),
-                            //     ),
-                            //     Container(),
-                            //   ],
-                            // ),
-                            ),
+                            )),
                       ),
                       const SizedBox(
                         height: 50,
                       ),
+                      (state.currentGameResponse.status == "open" &&
+                              state.currentGameResponse.firstPlayer['id'] !=
+                                  state.currentPlayerId)
+                          ? ElevatedButton(
+                              onPressed: () {
+                                gamesBloc.add(JoinGameEvent(
+                                    state.currentGameResponse.id));
+                              },
+                              child: const Text('Join game'))
+                          : Container(),
                       Text(game.id.toString()),
                       Text(game.status),
                       Text(game.created),
@@ -167,5 +138,16 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
         ),
       ),
     );
+  }
+
+  Map<String, dynamic> getCoordinatesFromIndex(int index) {
+    int row = index ~/ 3;
+    int column = (index % 3).toInt();
+
+    // print('row: ' + row.toString() + ' column: ' + column.toString());
+
+    Map<String, dynamic> paramsForRequestBody = {"row": row, "col": column};
+
+    return paramsForRequestBody;
   }
 }
