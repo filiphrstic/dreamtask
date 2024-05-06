@@ -50,6 +50,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: BlocListener<LoginBloc, LoginState>(
                       listener: (context, state) {
                         if (state is SuccessfulLoginState) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Login successful'),
+                          ));
                           Navigator.popAndPushNamed(
                               context, GamesScreen.routeName);
                         }
@@ -57,18 +61,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: BlocBuilder<LoginBloc, LoginState>(
                           builder: (context, state) {
                         if (state is LoginInitial) {
-                          return const Text('initial');
+                          return Container();
                         }
                         if (state is LoginLoading) {
                           return const CircularProgressIndicator();
                           // return Text('loading');
                         }
                         if (state is SuccessfulLoginState) {
-                          return Text(
-                              'Login successfull ${state.loginResponse}');
+                          return const CircularProgressIndicator();
                         }
                         if (state is ErrorLoginState) {
-                          return Text('Error: ${state.loginError}');
+                          return Text(
+                            state.loginError,
+                            style: const TextStyle(color: Colors.red),
+                          );
                           // return Text()
                         } else {
                           return const Text('Unhandled state');

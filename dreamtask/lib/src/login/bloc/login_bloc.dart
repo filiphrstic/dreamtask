@@ -38,8 +38,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if (response.statusCode == 200) {
           emit(SuccessfulLoginState(response.data));
         }
-      } catch (e) {
-        emit(ErrorLoginState(e.toString()));
+      } on DioException catch (e) {
+        if (e.response != null) {
+          // print(e.response!.data['errors'][0]['message']);
+          emit(ErrorLoginState(
+              'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'));
+        }
         // print(e);
       }
     });
@@ -56,14 +60,31 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             SuccessfulRegistrationState(),
           );
         }
-      } catch (e) {
-        emit(
-          ErrorLoginState(
-            e.toString(),
-          ),
-        );
+      } on DioException catch (e) {
+        if (e.response != null) {
+          // print(e.response!.data['errors'][0]['message']);
+          emit(ErrorLoginState(
+              'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'));
+        }
         // print(e);
       }
     });
   }
 }
+
+// String _handleError(DioException error) {
+//   if (error.type == DioExceptionType.badResponse) {
+//     return error.message ?? '';
+//   } else {
+//     return "Error";
+//   }
+// }
+
+// class ErrorHandler implements Exception {
+//   ErrorHandler.handle(dynamic error) {
+//     if (error is DioException) {
+//       // dio error so its an error from response of the API or from dio itself
+//       _handleError(error);
+//     }
+//   }
+// }

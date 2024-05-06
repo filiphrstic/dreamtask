@@ -13,7 +13,7 @@ class GamesScreen extends StatefulWidget {
 }
 
 class _GamesScreenState extends State<GamesScreen> {
-  var selectedStatus = 'open';
+  var selectedStatus = '';
   final gamesBloc = GamesBloc();
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,6 @@ class _GamesScreenState extends State<GamesScreen> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           ElevatedButton(
               onPressed: () {
-                // gamesBloc.add(FetchGamesEvent(''));
                 gamesBloc.add(CreateNewGameEvent());
                 gamesBloc.add(FetchGamesEvent(''));
               },
@@ -32,19 +31,10 @@ class _GamesScreenState extends State<GamesScreen> {
           BlocProvider(
             create: (context) => gamesBloc,
             child: BlocListener<GamesBloc, GamesState>(
-              listener: (context, state) {
-                // if (state is SuccessfulCreateNewGameState) {
-                //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                //     content: Text('New game created successfully'),
-                //   ));
-                // }
-              },
+              listener: (context, state) {},
               child: BlocBuilder<GamesBloc, GamesState>(
                 builder: (context, state) {
                   if (state is SuccessfulGamesState) {
-                    // int lastResultIndex = int.parse(state.gamesResponse.next
-                    //     .substring(state.gamesResponse.next.length - 2));
-                    // int firstResultIndex = lastResultIndex - 10;
                     return Column(
                       children: [
                         Padding(
@@ -71,24 +61,20 @@ class _GamesScreenState extends State<GamesScreen> {
                             ],
                           ),
                         ),
-                        // Align(
-                        //   alignment: Alignment.centerLeft,
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(8.0),
-                        //     child: Text(
-                        //         'Showing $firstResultIndex-$lastResultIndex of ${state.gamesResponse.count} total'),
-                        //   ),
-                        // )
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: Row(
                             children: [
-                              // Text(
-                              //     'Showing $firstResultIndex-$lastResultIndex of ${state.gamesResponse.count} total'),
+                              Text(
+                                  'Total results: ${state.gamesResponse.count}'),
                               const Spacer(),
                               DropdownButton(
                                 value: selectedStatus,
                                 items: const [
+                                  DropdownMenuItem(
+                                    value: '',
+                                    child: Text('all'),
+                                  ),
                                   DropdownMenuItem(
                                     value: 'open',
                                     child: Text('open'),
@@ -131,7 +117,7 @@ class _GamesScreenState extends State<GamesScreen> {
                 builder: (context, state) {
                   if (state is GamesInitial) {
                     gamesBloc.add(FetchGamesEvent(''));
-                    return const Text('initial');
+                    return const CircularProgressIndicator();
                   }
                   if (state is GamesLoading) {
                     return const CircularProgressIndicator();

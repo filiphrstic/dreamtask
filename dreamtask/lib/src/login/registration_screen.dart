@@ -43,7 +43,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       child: BlocBuilder<LoginBloc, LoginState>(
                           builder: (context, state) {
                         if (state is LoginInitial) {
-                          return const Text('initial');
+                          return Container();
                         }
                         if (state is LoginLoading) {
                           return const CircularProgressIndicator();
@@ -62,7 +62,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           );
                         }
                         if (state is ErrorLoginState) {
-                          return Text('Error: ${state.loginError}');
+                          return Text(
+                            state.loginError,
+                            style: const TextStyle(color: Colors.red),
+                          );
                         } else {
                           return const Text('Unhandled state');
                         }

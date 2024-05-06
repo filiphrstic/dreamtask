@@ -15,7 +15,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
   String gamesEndpoint = 'https://tictactoe.aboutdream.io/games/';
   GamesBloc() : super(GamesInitial()) {
     on<FetchGamesEvent>((event, emit) async {
-      // var username = await secureStorage.read(key: 'username');
       String id = await secureStorage.read(key: 'id') ?? "0";
 
       if (event.gamesEndpoint.isNotEmpty) {
@@ -24,7 +23,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         gamesEndpoint = 'https://tictactoe.aboutdream.io/games/';
       }
       try {
-        emit(GamesLoading());
         var authToken = await secureStorage.read(key: 'token');
         final response = await dio.get(
           gamesEndpoint,
@@ -32,7 +30,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': 'Bearer $authToken',
-            // 'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
           }),
         );
 
@@ -48,22 +45,15 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
 
     on<CreateNewGameEvent>((event, emit) async {
       try {
-        // emit(GamesLoading());
         var authToken = await secureStorage.read(key: 'token');
-        // var firstPlayer = await secureStorage.read(key: 'username');
-        // print(firstPlayer.toString());
         await dio.post(
           gamesEndpoint,
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': 'Bearer $authToken',
-            // 'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
           }),
         );
-        // if (response.statusCode == 200) {
-        // emit(SuccessfulCreateNewGameState());
-        // }
       } catch (e) {
         emit(ErrorGamesState(e.toString()));
       }
@@ -75,16 +65,12 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         emit(GamesLoading());
         var authToken = await secureStorage.read(key: 'token');
         final currentGameEndpoint = '$gamesEndpoint${event.gameId}/';
-        // print(currentGameEndpoint);
-        // var firstPlayer = await secureStorage.read(key: 'username');
-        // print(firstPlayer.toString());
         final response = await dio.get(
           currentGameEndpoint,
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': 'Bearer $authToken',
-            // 'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
           }),
         );
         if (response.statusCode == 200) {
@@ -98,7 +84,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     });
 
     on<MakeMoveEvent>((event, emit) async {
-      // String currentPlayerId = await secureStorage.read(key: 'id') ?? "0";
       try {
         emit(GamesLoading());
         var authToken = await secureStorage.read(key: 'token');
@@ -111,7 +96,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
               'Content-Type': 'application/json',
               'Accept': 'application/json',
               'Authorization': 'Bearer $authToken',
-              // 'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
             },
           ),
         );
@@ -124,7 +108,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     });
 
     on<JoinGameEvent>((event, emit) async {
-      // String currentPlayerId = await secureStorage.read(key: 'id') ?? "0";
       try {
         emit(GamesLoading());
         var authToken = await secureStorage.read(key: 'token');
@@ -136,7 +119,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
               'Content-Type': 'application/json',
               'Accept': 'application/json',
               'Authorization': 'Bearer $authToken',
-              // 'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
             },
           ),
         );
