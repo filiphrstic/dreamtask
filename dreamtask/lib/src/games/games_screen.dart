@@ -24,13 +24,21 @@ class _GamesScreenState extends State<GamesScreen> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           ElevatedButton(
               onPressed: () {
+                // gamesBloc.add(FetchGamesEvent(''));
+                gamesBloc.add(CreateNewGameEvent());
                 gamesBloc.add(FetchGamesEvent(''));
               },
               child: const Text('Create new game')),
           BlocProvider(
             create: (context) => gamesBloc,
             child: BlocListener<GamesBloc, GamesState>(
-              listener: (context, state) {},
+              listener: (context, state) {
+                // if (state is SuccessfulCreateNewGameState) {
+                //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                //     content: Text('New game created successfully'),
+                //   ));
+                // }
+              },
               child: BlocBuilder<GamesBloc, GamesState>(
                 builder: (context, state) {
                   if (state is SuccessfulGamesState) {
@@ -40,7 +48,7 @@ class _GamesScreenState extends State<GamesScreen> {
                     return Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Row(
                             children: [
                               (state.gamesResponse.previous.isEmpty)
@@ -72,7 +80,7 @@ class _GamesScreenState extends State<GamesScreen> {
                         //   ),
                         // )
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(right: 8.0),
                           child: Row(
                             children: [
                               // Text(

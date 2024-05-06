@@ -13,6 +13,8 @@ final class SuccessfulGamesState extends GamesState {
   SuccessfulGamesState(this.gamesResponse);
 }
 
+// final class SuccessfulCreateNewGameState extends GamesState {}
+
 final class ErrorGamesState extends GamesState {
   final String gamesError;
   ErrorGamesState(this.gamesError);

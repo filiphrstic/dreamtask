@@ -16,7 +16,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
     GameModel game = ModalRoute.of(context)?.settings.arguments as GameModel;
     List<dynamic> boardList = game.board[0] + game.board[1] + game.board[2];
     int firstPlayerId = game.firstPlayer['id'];
-    int secondPlayerId = game.secondPlayer['id'];
+    int secondPlayerId = game.secondPlayer['id'] ?? 0;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Game details')),

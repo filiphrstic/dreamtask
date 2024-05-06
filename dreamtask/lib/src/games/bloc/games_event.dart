@@ -4,7 +4,9 @@ part of 'games_bloc.dart';
 sealed class GamesEvent {}
 
 class FetchGamesEvent extends GamesEvent {
-  final String fetchGamesUrl;
+  final String gamesEndpoint;
 
-  FetchGamesEvent(this.fetchGamesUrl);
+  FetchGamesEvent(this.gamesEndpoint);
 }
+
+class CreateNewGameEvent extends GamesEvent {}
