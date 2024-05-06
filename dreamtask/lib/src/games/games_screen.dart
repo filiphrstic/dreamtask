@@ -197,7 +197,7 @@ class GameCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, GameDetailsScreen.routeName,
-            arguments: game);
+            arguments: game.id);
       },
       child: Card(
         child: SizedBox(

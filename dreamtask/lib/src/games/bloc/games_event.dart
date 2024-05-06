@@ -10,3 +10,9 @@ class FetchGamesEvent extends GamesEvent {
 }
 
 class CreateNewGameEvent extends GamesEvent {}
+
+class FetchCurrentGameDetails extends GamesEvent {
+  final int gameId;
+
+  FetchCurrentGameDetails(this.gameId);
+}

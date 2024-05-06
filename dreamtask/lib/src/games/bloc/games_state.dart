@@ -15,8 +15,15 @@ final class SuccessfulGamesState extends GamesState {
 }
 
 // final class SuccessfulCreateNewGameState extends GamesState {}
-
 final class ErrorGamesState extends GamesState {
   final String gamesError;
   ErrorGamesState(this.gamesError);
+}
+
+// final class CurrentGameInitial extends GamesState {}
+
+final class SuccessfulCurrentGameDetails extends GamesState {
+  final GameModel currentGameResponse;
+
+  SuccessfulCurrentGameDetails(this.currentGameResponse);
 }
