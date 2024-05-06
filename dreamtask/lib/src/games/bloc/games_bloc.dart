@@ -27,7 +27,8 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': 'Bearer $authToken',
+            // 'Authorization': 'Bearer $authToken',
+            'Authorization': 'Bearer 0bf4e801698d25b9e44e4303c5250c2bde31a072',
           }),
         );
 

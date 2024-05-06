@@ -1,3 +1,4 @@
+import 'package:dreamtask/src/game_details/game_details_screen.dart';
 import 'package:dreamtask/src/games/bloc/games_bloc.dart';
 import 'package:dreamtask/src/games/game_model.dart';
 import 'package:flutter/material.dart';
@@ -98,8 +99,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                     selectedStatus = value!;
 
                                     gamesBloc.add(FetchGamesEvent(
-                                        'https://tictactoe.aboutdream.io/games/?status=' +
-                                            value));
+                                        'https://tictactoe.aboutdream.io/games/?status=$value'));
                                   });
                                 },
                               ),
@@ -178,15 +178,21 @@ class GameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: SizedBox(
-        height: 75.0,
-        child: Column(
-          children: [
-            Text(game.id.toString()),
-            Text(game.status),
-            Text(game.created),
-          ],
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, GameDetailsScreen.routeName,
+            arguments: game);
+      },
+      child: Card(
+        child: SizedBox(
+          height: 75.0,
+          child: Column(
+            children: [
+              Text(game.id.toString()),
+              Text(game.status),
+              Text(game.created),
+            ],
+          ),
         ),
       ),
     );

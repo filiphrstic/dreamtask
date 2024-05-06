@@ -28,7 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
         await secureStorage.write(
           key: 'id',
-          value: response.data['id'],
+          value: response.data['id'].toString(),
         );
         // print(response.data['token']);
 
