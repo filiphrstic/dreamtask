@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:dreamtask/src/users/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -9,6 +10,7 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final Dio dio = Dio();
   final secureStorage = const FlutterSecureStorage();
+  CurrentUserSingleton currentUser = CurrentUserSingleton.instance;
 
   LoginBloc() : super(LoginInitial()) {
     on<UserLoginEvent>((event, emit) async {
@@ -22,18 +24,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           key: 'token',
           value: response.data['token'],
         );
-        await secureStorage.write(
-          key: 'username',
-          value: response.data['username'],
-        );
-        await secureStorage.write(
-          key: 'id',
-          value: response.data['id'].toString(),
-        );
-        // print(response.data['token']);
-
-        // var responseMap = json.decode(response.data);
-        // print(responseMap);
+        currentUser.id = response.data['id'];
+        currentUser.username = response.data['username'];
+        // await secureStorage.write(
+        //   key: 'username',
+        //   value: response.data['username'],
+        // );
+        // await secureStorage.write(
+        //   key: 'id',
+        //   value: response.data['id'].toString(),
+        // );
 
         if (response.statusCode == 200) {
           emit(SuccessfulLoginState(response.data));

@@ -1,8 +1,10 @@
 import 'package:dreamtask/src/game_details/game_details_screen.dart';
+import 'package:dreamtask/src/game_details_arguments.dart';
 import 'package:dreamtask/src/games/bloc/games_bloc.dart';
 import 'package:dreamtask/src/games/game_model.dart';
 import 'package:dreamtask/src/login/bloc/login_bloc.dart';
 import 'package:dreamtask/src/login/login_screen.dart';
+import 'package:dreamtask/src/users/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -159,7 +161,6 @@ class _GamesScreenState extends State<GamesScreen> {
                           if (state is SuccessfulGamesState) {
                             return GamesListWidget(
                               gamesList: state.gamesResponse.gamesList,
-                              userId: state.id,
                             );
                           }
                           if (state is ErrorGamesState) {
@@ -189,9 +190,7 @@ class _GamesScreenState extends State<GamesScreen> {
 
 class GamesListWidget extends StatelessWidget {
   final List<GameModel> gamesList;
-  final int userId;
-  const GamesListWidget(
-      {super.key, required this.gamesList, required this.userId});
+  const GamesListWidget({super.key, required this.gamesList});
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +201,6 @@ class GamesListWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           return GameCard(
             game: gamesList[index],
-            userId: userId,
           );
         },
       ),
@@ -212,15 +210,19 @@ class GamesListWidget extends StatelessWidget {
 
 class GameCard extends StatelessWidget {
   final GameModel game;
-  final int userId;
-  const GameCard({super.key, required this.game, required this.userId});
+  const GameCard({
+    super.key,
+    required this.game,
+  });
 
   @override
   Widget build(BuildContext context) {
+    CurrentUserSingleton currentUser = CurrentUserSingleton.instance;
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, GameDetailsScreen.routeName,
-            arguments: game.id);
+            arguments: GameDetailsArguments(game.id,
+                game.firstPlayer['id'] ?? 0, game.secondPlayer['id'] ?? 0));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -273,13 +275,13 @@ class GameCard extends StatelessWidget {
                     const Spacer(),
                     Column(
                       children: [
-                        (userId == game.firstPlayer['id'])
+                        (currentUser.id == game.firstPlayer['id'])
                             ? const Text(
                                 'You have created this game',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               )
                             : Container(),
-                        (userId == game.secondPlayer['id'])
+                        (currentUser.id == game.secondPlayer['id'])
                             ? const Text(
                                 'You are playing this game',
                                 style: TextStyle(fontWeight: FontWeight.bold),

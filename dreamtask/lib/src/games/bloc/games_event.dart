@@ -13,8 +13,14 @@ class CreateNewGameEvent extends GamesEvent {}
 
 class FetchCurrentGameDetails extends GamesEvent {
   final int gameId;
+  // final int firstPlayer;
+  // final int secondPlayer;
 
-  FetchCurrentGameDetails(this.gameId);
+  FetchCurrentGameDetails(
+    this.gameId,
+    // this.firstPlayer,
+    // this.secondPlayer,
+  );
 }
 
 class JoinGameEvent extends GamesEvent {
@@ -28,4 +34,16 @@ class MakeMoveEvent extends GamesEvent {
   final Map<String, dynamic> params;
 
   MakeMoveEvent(this.gameId, this.params);
+}
+
+class FetchFirstPlayer extends GamesEvent {
+  final int id;
+
+  FetchFirstPlayer(this.id);
+}
+
+class FetchSecondPlayer extends GamesEvent {
+  final int id;
+
+  FetchSecondPlayer(this.id);
 }

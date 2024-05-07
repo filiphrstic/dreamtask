@@ -27,3 +27,15 @@ final class SuccessfulCurrentGameDetails extends GamesState {
 }
 
 final class SuccessfulMakeMove extends GamesState {}
+
+final class SuccessfulFirstPlayer extends GamesState {
+  final UserModel firstPlayer;
+
+  SuccessfulFirstPlayer(this.firstPlayer);
+}
+
+final class SuccessfulSecondPlayer extends GamesState {
+  final UserModel secondPlayer;
+
+  SuccessfulSecondPlayer(this.secondPlayer);
+}

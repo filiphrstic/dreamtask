@@ -1,4 +1,5 @@
 import 'package:dreamtask/src/game_details/game_details_screen.dart';
+import 'package:dreamtask/src/game_details_arguments.dart';
 import 'package:dreamtask/src/games/games_screen.dart';
 import 'package:dreamtask/src/login/login_screen.dart';
 import 'package:dreamtask/src/login/registration_screen.dart';
@@ -84,7 +85,13 @@ class MyApp extends StatelessWidget {
                   case GamesScreen.routeName:
                     return const GamesScreen();
                   case GameDetailsScreen.routeName:
-                    return const GameDetailsScreen();
+                    GameDetailsArguments gameDetailsArguments =
+                        routeSettings.arguments as GameDetailsArguments;
+                    return GameDetailsScreen(
+                      firstPlayer: gameDetailsArguments.firstPlayer,
+                      gameId: gameDetailsArguments.gameId,
+                      secondPlayer: gameDetailsArguments.secondPlayer,
+                    );
                   default:
                     return const LoginScreen();
                   // return const GamesScreen();
