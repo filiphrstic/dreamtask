@@ -98,22 +98,30 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                           }
                                           if (stateUser
                                               is FetchFirstPlayerSuccessfully) {
-                                            return Column(
-                                              children: [
-                                                (game.status == 'finished' &&
-                                                        stateUser.user.id ==
-                                                            game.winner['id'])
-                                                    ? const FaIcon(
-                                                        FontAwesomeIcons.crown)
-                                                    : Container(),
-                                                Text(
-                                                  stateUser.user.username,
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
+                                            return SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              child: Column(
+                                                children: [
+                                                  (game.status == 'finished' &&
+                                                          stateUser.user.id ==
+                                                              game.winner['id'])
+                                                      ? const FaIcon(
+                                                          FontAwesomeIcons
+                                                              .crown)
+                                                      : Container(),
+                                                  Text(
+                                                    stateUser.user.username,
+                                                    style: const TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             );
                                           } else {
                                             return Container();
@@ -142,22 +150,30 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                           }
                                           if (stateUser2
                                               is FetchSecondPlayerSuccessfully) {
-                                            return Column(
-                                              children: [
-                                                (game.status == 'finished' &&
-                                                        stateUser2.user2.id ==
-                                                            game.winner['id'])
-                                                    ? const FaIcon(
-                                                        FontAwesomeIcons.crown)
-                                                    : Container(),
-                                                Text(
-                                                  stateUser2.user2.username,
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
+                                            return SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              child: Column(
+                                                children: [
+                                                  (game.status == 'finished' &&
+                                                          stateUser2.user2.id ==
+                                                              game.winner['id'])
+                                                      ? const FaIcon(
+                                                          FontAwesomeIcons
+                                                              .crown)
+                                                      : Container(),
+                                                  Text(
+                                                    stateUser2.user2.username,
+                                                    style: const TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             );
                                           } else {
                                             return Container();
