@@ -37,20 +37,9 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     CurrentUserSingleton currentUser = CurrentUserSingleton.instance;
-    // GameModel game = ModalRoute.of(context)?.settings.arguments as GameModel;
-    // List<dynamic> boardList = game.board[0] + game.board[1] + game.board[2];
-    // int firstPlayerId = game.firstPlayer['id'];
-    // int secondPlayerId = game.secondPlayer['id'] ?? 0;
-    // GameDetailsArguments gameDetailsArguments =
-    //     ModalRoute.of(context)?.settings.arguments as GameDetailsArguments;
-    // int firstPlayer = ModalRoute.of(context)?.settings.arguments as int;
-    // int secondPlayer = ModalRoute.of(context)?.settings.arguments as int;
     final gamesBloc = GamesBloc();
     final userBloc = UsersBloc();
     final userBloc2 = UsersBloc();
-
-    // UserModel? firstPlayerModel;
-    // UserModel? secondPlayerModel;
 
     return WillPopScope(
       onWillPop: () async {
@@ -61,39 +50,30 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
         appBar: AppBar(
           title: Text('Game $gameId'),
         ),
-        // body: Text(game.id.toString()),
         body: BlocProvider(
           create: (context) => gamesBloc,
           child: BlocListener<GamesBloc, GamesState>(
-            listener: (context, state) {
-              // if (state is SuccessfulFirstPlayer) {
-              //   firstPlayerModel = state.firstPlayer;
-              // }
-              // if (state is SuccessfulSecondPlayer) {
-              //   secondPlayerModel = state.secondPlayer;
-              // }
-            },
+            listener: (context, state) {},
             child: BlocBuilder<GamesBloc, GamesState>(
               builder: (context, state) {
                 if (state is GamesInitial) {
-                  // gamesBloc.add(FetchFirstPlayer(firstPlayer));
-                  // gamesBloc.add(FetchSecondPlayer(secondPlayer));
-                  gamesBloc.add(FetchCurrentGameDetails(gameId));
+                  gamesBloc.add(
+                    FetchCurrentGameDetails(gameId),
+                  );
                   return const Text('initial');
                 } else if (state is GamesLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 } else if (state is SuccessfulCurrentGameDetails) {
                   GameModel game = state.currentGameResponse;
                   List<dynamic> boardList =
                       game.board[0] + game.board[1] + game.board[2];
-                  // int firstPlayerId = game.firstPlayer['id'];
-                  // int secondPlayerId = game.secondPlayer['id'] ?? 0;
                   List numberOfMoves = boardList
                       .where(
                         (element) => element != null,
                       )
                       .toList();
-
                   return Align(
                     alignment: Alignment.topCenter,
                     child: Column(
@@ -103,48 +83,45 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              // (firstPlayerModel == null)
-                              //     ? Text(firstPlayerModel!.username)
-                              //     : Text('shiet'),
-
                               (firstPlayer != 0)
                                   ? BlocProvider(
                                       create: (context) => userBloc,
-                                      child: BlocListener<UsersBloc,
-                                              UsersState>(
-                                          listener: (context, stateUser) {},
-                                          child: BlocBuilder<UsersBloc,
-                                                  UsersState>(
-                                              builder: (context, stateUser) {
-                                            if (stateUser is UsersInitial) {
-                                              userBloc.add(FetchUserDetails(
-                                                  firstPlayer));
-                                            }
-                                            if (stateUser
-                                                is FetchUserDetailsSuccessful) {
-                                              return Column(
-                                                children: [
-                                                  (game.status == 'finished' &&
-                                                          stateUser.user.id ==
-                                                              game.winner['id'])
-                                                      ? FaIcon(FontAwesomeIcons
-                                                          .crown)
-                                                      : Container(),
-                                                  Text(
-                                                    stateUser.user.username,
-                                                    style: const TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
+                                      child:
+                                          BlocListener<UsersBloc, UsersState>(
+                                        listener: (context, stateUser) {},
+                                        child:
+                                            BlocBuilder<UsersBloc, UsersState>(
+                                                builder: (context, stateUser) {
+                                          if (stateUser is UsersInitial) {
+                                            userBloc.add(
+                                                FetchUserDetails(firstPlayer));
+                                          }
+                                          if (stateUser
+                                              is FetchFirstPlayerSuccessfully) {
+                                            return Column(
+                                              children: [
+                                                (game.status == 'finished' &&
+                                                        stateUser.user.id ==
+                                                            game.winner['id'])
+                                                    ? const FaIcon(
+                                                        FontAwesomeIcons.crown)
+                                                    : Container(),
+                                                Text(
+                                                  stateUser.user.username,
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                ],
-                                              );
-                                            } else {
-                                              return Container();
-                                            }
-                                          })))
-                                  : Text('Waiting for first player'),
+                                                ),
+                                              ],
+                                            );
+                                          } else {
+                                            return Container();
+                                          }
+                                        }),
+                                      ),
+                                    )
+                                  : const Text('Waiting for first player'),
                               const Text(
                                 'vs',
                                 style: TextStyle(fontSize: 20),
@@ -152,52 +129,55 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                               (secondPlayer != 0)
                                   ? BlocProvider(
                                       create: (context) => userBloc2,
-                                      child: BlocListener<UsersBloc,
-                                              UsersState>(
-                                          listener: (context, stateUser2) {},
-                                          child: BlocBuilder<UsersBloc,
-                                                  UsersState>(
-                                              builder: (context, stateUser2) {
-                                            if (stateUser2 is UsersInitial) {
-                                              userBloc2.add(FetchUserDetails2(
-                                                  secondPlayer));
-                                            }
-                                            if (stateUser2
-                                                is FetchUser2DetailsSuccessful) {
-                                              return Column(
-                                                children: [
-                                                  (game.status == 'finished' &&
-                                                          stateUser2.user2.id ==
-                                                              game.winner['id'])
-                                                      ? FaIcon(FontAwesomeIcons
-                                                          .crown)
-                                                      : Container(),
-                                                  Text(
-                                                    stateUser2.user2.username,
-                                                    style: const TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
+                                      child:
+                                          BlocListener<UsersBloc, UsersState>(
+                                        listener: (context, stateUser2) {},
+                                        child:
+                                            BlocBuilder<UsersBloc, UsersState>(
+                                                builder: (context, stateUser2) {
+                                          if (stateUser2 is UsersInitial) {
+                                            userBloc2.add(
+                                              FetchUserDetails2(secondPlayer),
+                                            );
+                                          }
+                                          if (stateUser2
+                                              is FetchSecondPlayerSuccessfully) {
+                                            return Column(
+                                              children: [
+                                                (game.status == 'finished' &&
+                                                        stateUser2.user2.id ==
+                                                            game.winner['id'])
+                                                    ? const FaIcon(
+                                                        FontAwesomeIcons.crown)
+                                                    : Container(),
+                                                Text(
+                                                  stateUser2.user2.username,
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                ],
-                                              );
-                                            } else {
-                                              return Container();
-                                            }
-                                          })))
-                                  : Text('Waiting for second player'),
+                                                ),
+                                              ],
+                                            );
+                                          } else {
+                                            return Container();
+                                          }
+                                        }),
+                                      ),
+                                    )
+                                  : const Text('Waiting for second player'),
                             ],
                           ),
                         ),
                         (firstPlayer == currentUser.id &&
                                 numberOfMoves.length.isEven &&
                                 game.status == 'progress')
-                            ? Text('Your turn to play!')
+                            ? const Text('Your turn to play!')
                             : Container(),
                         (secondPlayer == currentUser.id &&
-                                numberOfMoves.length.isOdd)
-                            ? Text('Your turn to play!')
+                                numberOfMoves.length.isOdd &&
+                                game.status == 'progress')
+                            ? const Text('Your turn to play!')
                             : Container(),
                         Padding(
                           padding: const EdgeInsets.all(20.0),
@@ -217,30 +197,51 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                     return Container(
                                       color: Colors.white,
                                       child: const Center(
-                                          child: Text(
-                                        'X',
-                                        style: TextStyle(fontSize: 35),
-                                      )),
+                                        child: Text(
+                                          'X',
+                                          style: TextStyle(fontSize: 35),
+                                        ),
+                                      ),
                                     );
                                   } else if (boardList[index] == secondPlayer) {
                                     return Container(
                                       color: Colors.white,
                                       child: const Center(
-                                          child: Text(
-                                        'O',
-                                        style: TextStyle(fontSize: 35),
-                                      )),
+                                        child: Text(
+                                          'O',
+                                          style: TextStyle(fontSize: 35),
+                                        ),
+                                      ),
                                     );
                                   } else if (boardList[index] == null &&
-                                      firstPlayer == state.currentPlayerId &&
+                                      firstPlayer == currentUser.id &&
                                       numberOfMoves.length.isEven) {
                                     return InkWell(
                                       onTap: () {
                                         Map<String, dynamic>
                                             paramsForRequestBody =
                                             getCoordinatesFromIndex(index);
-                                        gamesBloc.add(MakeMoveEvent(
-                                            gameId, paramsForRequestBody));
+                                        gamesBloc.add(
+                                          MakeMoveEvent(
+                                              gameId, paramsForRequestBody),
+                                        );
+                                      },
+                                      child: Container(
+                                        color: Colors.white,
+                                      ),
+                                    );
+                                  } else if (boardList[index] == null &&
+                                      secondPlayer == currentUser.id &&
+                                      numberOfMoves.length.isOdd) {
+                                    return InkWell(
+                                      onTap: () {
+                                        Map<String, dynamic>
+                                            paramsForRequestBody =
+                                            getCoordinatesFromIndex(index);
+                                        gamesBloc.add(
+                                          MakeMoveEvent(
+                                              gameId, paramsForRequestBody),
+                                        );
                                       },
                                       child: Container(
                                         color: Colors.white,
@@ -263,14 +264,12 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                             ? ElevatedButton(
                                 onPressed: () {
                                   secondPlayer = currentUser.id;
-                                  gamesBloc.add(JoinGameEvent(
-                                      state.currentGameResponse.id));
-                                  ;
+                                  gamesBloc.add(
+                                    JoinGameEvent(state.currentGameResponse.id),
+                                  );
                                 },
                                 child: const Text('Join game'))
                             : Container(),
-                        // Text(game.id.toString()),
-
                         const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Text(
@@ -279,23 +278,20 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                         ),
-
-                        // Text('Game created by: ${game.firstPlayer['id']}'),
-                        // (game.status == 'finished')
-                        //     ? Text('Winner: ${game.winner['id']}')
-                        //     : Container(),
                         Text('Game status: ${game.status}'),
                         Text(
-                            'Created: ${DateFormat('MM/dd/yyyy hh:mm a').format(DateTime.parse(game.created))}'),
-
-                        // Text(boardList.toString()),
+                            'Created: ${DateFormat('MM/dd/yyyy hh:mm a').format(
+                          DateTime.parse(game.created),
+                        )}'),
                       ],
                     ),
                   );
                 } else if (state is ErrorGamesState) {
-                  return Center(child: Text(state.gamesError));
+                  return Center(
+                    child: Text(state.gamesError),
+                  );
                 } else {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
               },
             ),
@@ -308,11 +304,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
   Map<String, dynamic> getCoordinatesFromIndex(int index) {
     int row = index ~/ 3;
     int column = (index % 3).toInt();
-
-    // print('row: ' + row.toString() + ' column: ' + column.toString());
-
     Map<String, dynamic> paramsForRequestBody = {"row": row, "col": column};
-
     return paramsForRequestBody;
   }
 }

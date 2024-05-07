@@ -7,16 +7,14 @@ final class UsersInitial extends UsersState {}
 
 final class FetchUserDetailsLoading extends UsersState {}
 
-final class FetchUserDetailsSuccessful extends UsersState {
+final class FetchFirstPlayerSuccessfully extends UsersState {
   final UserModel user;
-
-  FetchUserDetailsSuccessful(this.user);
+  FetchFirstPlayerSuccessfully(this.user);
 }
 
-final class FetchUser2DetailsSuccessful extends UsersState {
+final class FetchSecondPlayerSuccessfully extends UsersState {
   final UserModel user2;
-
-  FetchUser2DetailsSuccessful(this.user2);
+  FetchSecondPlayerSuccessfully(this.user2);
 }
 
 final class ErrorUserState extends UsersState {

@@ -1,14 +1,11 @@
 import 'package:dreamtask/src/game_details/game_details_screen.dart';
-import 'package:dreamtask/src/game_details_arguments.dart';
+import 'package:dreamtask/src/game_details/game_details_arguments.dart';
 import 'package:dreamtask/src/games/games_screen.dart';
 import 'package:dreamtask/src/login/login_screen.dart';
 import 'package:dreamtask/src/login/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-import 'sample_feature/sample_item_details_view.dart';
-import 'sample_feature/sample_item_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
@@ -74,10 +71,6 @@ class MyApp extends StatelessWidget {
                 switch (routeSettings.name) {
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
-                  case SampleItemDetailsView.routeName:
-                    return const SampleItemDetailsView();
-                  case SampleItemListView.routeName:
-                    return const SampleItemListView();
                   case RegistrationScreen.routeName:
                     return const RegistrationScreen();
                   case LoginScreen.routeName:
@@ -94,7 +87,6 @@ class MyApp extends StatelessWidget {
                     );
                   default:
                     return const LoginScreen();
-                  // return const GamesScreen();
                 }
               },
             );

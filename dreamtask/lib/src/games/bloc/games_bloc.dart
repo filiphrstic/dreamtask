@@ -63,7 +63,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     });
 
     on<FetchCurrentGameDetails>((event, emit) async {
-      // String currentPlayerId = await secureStorage.read(key: 'id') ?? "0";
       int currentPlayerId = currentUser.id;
       try {
         emit(GamesLoading());
@@ -77,23 +76,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
             'Authorization': 'Bearer $authToken',
           }),
         );
-// final responseFirstPlayer = await dio.get(
-//           usersEndpoint + event.firstPlayer.toString() + '/',
-//           options: Options(headers: {
-//             'Content-Type': 'application/json',
-//             'Accept': 'application/json',
-//             'Authorization': 'Bearer $authToken',
-//           }),
-//         );
-
-//         final responseSecondPlayer = await dio.get(
-//           usersEndpoint + event.firstPlayer.toString() + '/',
-//           options: Options(headers: {
-//             'Content-Type': 'application/json',
-//             'Accept': 'application/json',
-//             'Authorization': 'Bearer $authToken',
-//           }),
-//         );
         if (response.statusCode == 200) {
           GameModel currentGameModel = GameModel.fromJSON(response.data);
           emit(SuccessfulCurrentGameDetails(currentGameModel, currentPlayerId));
@@ -126,11 +108,9 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         }
       } on DioException catch (e) {
         if (e.response != null) {
-          // print(e.response!.data['errors'][0]['message']);
           emit(ErrorGamesState(
               'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'));
         }
-        // print(e);
       }
     });
 
@@ -151,48 +131,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         );
         if (response.statusCode == 200) {
           add(FetchCurrentGameDetails(event.gameId));
-        }
-      } catch (e) {
-        emit(ErrorGamesState(e.toString()));
-      }
-    });
-
-    on<FetchFirstPlayer>((event, emit) async {
-      try {
-        var authToken = await secureStorage.read(key: 'token');
-        final response = await dio.get(
-          '${usersEndpoint + event.id.toString()}/',
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $authToken',
-          }),
-        );
-
-        if (response.statusCode == 200) {
-          UserModel userModel = UserModel.fromJSON(response.data);
-          emit(SuccessfulFirstPlayer(userModel));
-        }
-      } catch (e) {
-        emit(ErrorGamesState(e.toString()));
-      }
-    });
-
-    on<FetchSecondPlayer>((event, emit) async {
-      try {
-        var authToken = await secureStorage.read(key: 'token');
-        final response = await dio.get(
-          '${usersEndpoint + event.id.toString()}/',
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $authToken',
-          }),
-        );
-
-        if (response.statusCode == 200) {
-          UserModel userModel = UserModel.fromJSON(response.data);
-          emit(SuccessfulFirstPlayer(userModel));
         }
       } catch (e) {
         emit(ErrorGamesState(e.toString()));

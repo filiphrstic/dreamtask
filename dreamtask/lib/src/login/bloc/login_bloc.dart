@@ -11,13 +11,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final Dio dio = Dio();
   final secureStorage = const FlutterSecureStorage();
   CurrentUserSingleton currentUser = CurrentUserSingleton.instance;
+  final String basicUrl = 'https://tictactoe.aboutdream.io/';
 
   LoginBloc() : super(LoginInitial()) {
     on<UserLoginEvent>((event, emit) async {
       try {
         emit(LoginLoading());
         final response = await dio.post(
-          'https://tictactoe.aboutdream.io/login/',
+          '${basicUrl}login/',
           data: {'username': event.username, 'password': event.password},
         );
         await secureStorage.write(
@@ -26,25 +27,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
         currentUser.id = response.data['id'];
         currentUser.username = response.data['username'];
-        // await secureStorage.write(
-        //   key: 'username',
-        //   value: response.data['username'],
-        // );
-        // await secureStorage.write(
-        //   key: 'id',
-        //   value: response.data['id'].toString(),
-        // );
-
         if (response.statusCode == 200) {
-          emit(SuccessfulLoginState(response.data));
+          emit(
+            SuccessfulLoginState(response.data),
+          );
         }
       } on DioException catch (e) {
         if (e.response != null) {
-          // print(e.response!.data['errors'][0]['message']);
-          emit(ErrorLoginState(
-              'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'));
+          emit(
+            ErrorLoginState(
+                'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'),
+          );
         }
-        // print(e);
       }
     });
 
@@ -52,7 +46,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         emit(LoginLoading());
         Response response = await dio.post(
-          'https://tictactoe.aboutdream.io/register/',
+          '${basicUrl}register/',
           data: {'username': event.username, 'password': event.password},
         );
         if (response.statusCode == 200) {
@@ -62,11 +56,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
       } on DioException catch (e) {
         if (e.response != null) {
-          // print(e.response!.data['errors'][0]['message']);
-          emit(ErrorLoginState(
-              'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'));
+          emit(
+            ErrorLoginState(
+                'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'),
+          );
         }
-        // print(e);
       }
     });
 
@@ -74,7 +68,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         var authToken = await secureStorage.read(key: 'token');
         Response response = await dio.post(
-          'https://tictactoe.aboutdream.io/logout/',
+          '${basicUrl}logout/',
           options: Options(
             headers: {
               'Content-Type': 'application/json',
@@ -91,29 +85,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
       } on DioException catch (e) {
         if (e.response != null) {
-          // print(e.response!.data['errors'][0]['message']);
-          emit(ErrorLoginState(
-              'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'));
+          emit(
+            ErrorLoginState(
+                'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'),
+          );
         }
-        // print(e);
       }
     });
   }
 }
-
-// String _handleError(DioException error) {
-//   if (error.type == DioExceptionType.badResponse) {
-//     return error.message ?? '';
-//   } else {
-//     return "Error";
-//   }
-// }
-
-// class ErrorHandler implements Exception {
-//   ErrorHandler.handle(dynamic error) {
-//     if (error is DioException) {
-      // dio error so its an error from response of the API or from dio itself
-//       _handleError(error);
-//     }
-//   }
-// }

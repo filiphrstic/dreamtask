@@ -1,5 +1,5 @@
 import 'package:dreamtask/src/game_details/game_details_screen.dart';
-import 'package:dreamtask/src/game_details_arguments.dart';
+import 'package:dreamtask/src/game_details/game_details_arguments.dart';
 import 'package:dreamtask/src/games/bloc/games_bloc.dart';
 import 'package:dreamtask/src/games/game_model.dart';
 import 'package:dreamtask/src/login/bloc/login_bloc.dart';
@@ -127,7 +127,6 @@ class _GamesScreenState extends State<GamesScreen> {
                                         onChanged: (value) {
                                           setState(() {
                                             selectedStatus = value!;
-
                                             gamesBloc.add(FetchGamesEvent(
                                                 'https://tictactoe.aboutdream.io/games/?status=$value'));
                                           });
@@ -220,9 +219,12 @@ class GameCard extends StatelessWidget {
     CurrentUserSingleton currentUser = CurrentUserSingleton.instance;
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, GameDetailsScreen.routeName,
-            arguments: GameDetailsArguments(game.id,
-                game.firstPlayer['id'] ?? 0, game.secondPlayer['id'] ?? 0));
+        Navigator.pushNamed(
+          context,
+          GameDetailsScreen.routeName,
+          arguments: GameDetailsArguments(game.id, game.firstPlayer['id'] ?? 0,
+              game.secondPlayer['id'] ?? 0),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -288,7 +290,9 @@ class GameCard extends StatelessWidget {
                               )
                             : Container(),
                         Text(DateFormat('MM/dd/yyyy hh:mm a')
-                            .format(DateTime.parse(game.created))
+                            .format(
+                              DateTime.parse(game.created),
+                            )
                             .toString()),
                       ],
                     ),

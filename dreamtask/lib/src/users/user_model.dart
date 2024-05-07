@@ -1,5 +1,4 @@
 // ignore_for_file: non_constant_identifier_names
-
 class UserModel {
   int id;
   String username;
@@ -27,6 +26,6 @@ class CurrentUserSingleton {
 
   CurrentUserSingleton._private();
 
-  static CurrentUserSingleton _instance = CurrentUserSingleton._private();
+  static final CurrentUserSingleton _instance = CurrentUserSingleton._private();
   static CurrentUserSingleton get instance => _instance;
 }

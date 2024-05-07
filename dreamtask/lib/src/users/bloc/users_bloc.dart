@@ -29,16 +29,16 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
         if (response.statusCode == 200) {
           UserModel user = UserModel.fromJSON(response.data);
           emit(
-            FetchUserDetailsSuccessful(user),
+            FetchFirstPlayerSuccessfully(user),
           );
         }
       } on DioException catch (e) {
         if (e.response != null) {
-          // print(e.response!.data['errors'][0]['message']);
-          emit(ErrorUserState(
-              'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'));
+          emit(
+            ErrorUserState(
+                'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'),
+          );
         }
-        // print(e);
       }
     });
 
@@ -58,16 +58,16 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
         if (response.statusCode == 200) {
           UserModel user = UserModel.fromJSON(response.data);
           emit(
-            FetchUser2DetailsSuccessful(user),
+            FetchSecondPlayerSuccessfully(user),
           );
         }
       } on DioException catch (e) {
         if (e.response != null) {
-          // print(e.response!.data['errors'][0]['message']);
-          emit(ErrorUserState(
-              'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'));
+          emit(
+            ErrorUserState(
+                'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'),
+          );
         }
-        // print(e);
       }
     });
   }
