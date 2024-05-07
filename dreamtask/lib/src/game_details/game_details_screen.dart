@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dreamtask/src/games/bloc/games_bloc.dart';
 import 'package:dreamtask/src/games/game_model.dart';
 import 'package:dreamtask/src/games/games_screen.dart';
@@ -28,16 +30,36 @@ class GameDetailsScreen extends StatefulWidget {
 }
 
 class _GameDetailsScreenState extends State<GameDetailsScreen> {
+  final gamesBloc = GamesBloc();
+
   int gameId;
   int firstPlayer;
   int secondPlayer;
 
   _GameDetailsScreenState(this.gameId, this.firstPlayer, this.secondPlayer);
 
+  late var timer;
+  @override
+  void initState() {
+    super.initState();
+    if (mounted) {
+      timer = Timer.periodic(
+          const Duration(seconds: 5),
+          (Timer t) => setState(() {
+                gamesBloc.add(FetchCurrentGameDetails(gameId));
+              }));
+    }
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     CurrentUserSingleton currentUser = CurrentUserSingleton.instance;
-    final gamesBloc = GamesBloc();
     final userBloc = UsersBloc();
     final userBloc2 = UsersBloc();
 
@@ -60,7 +82,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                   gamesBloc.add(
                     FetchCurrentGameDetails(gameId),
                   );
-                  return const Text('initial');
+                  return const Center(child: CircularProgressIndicator());
                 } else if (state is GamesLoading) {
                   return const Center(
                     child: CircularProgressIndicator(),

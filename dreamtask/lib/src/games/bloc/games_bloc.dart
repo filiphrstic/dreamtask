@@ -65,7 +65,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     on<FetchCurrentGameDetails>((event, emit) async {
       int currentPlayerId = currentUser.id;
       try {
-        emit(GamesLoading());
+        // emit(GamesLoading());
         var authToken = await secureStorage.read(key: 'token');
         final currentGameEndpoint = '$gamesEndpoint${event.gameId}/';
         final response = await dio.get(
