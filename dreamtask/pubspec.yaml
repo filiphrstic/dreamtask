@@ -18,6 +18,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_secure_storage: ^9.0.0
+  font_awesome_flutter: ^10.7.0
+  intl: ^0.18.0
   meta: ^1.9.1
 
 dev_dependencies:

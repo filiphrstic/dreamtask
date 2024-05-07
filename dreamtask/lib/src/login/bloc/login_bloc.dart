@@ -69,6 +69,35 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         // print(e);
       }
     });
+
+    on<UserLogoutEvent>((event, emit) async {
+      try {
+        var authToken = await secureStorage.read(key: 'token');
+        Response response = await dio.post(
+          'https://tictactoe.aboutdream.io/logout/',
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $authToken',
+            },
+          ),
+        );
+        if (response.statusCode == 200) {
+          secureStorage.deleteAll();
+          emit(
+            SuccessfulLogoutState(),
+          );
+        }
+      } on DioException catch (e) {
+        if (e.response != null) {
+          // print(e.response!.data['errors'][0]['message']);
+          emit(ErrorLoginState(
+              'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'));
+        }
+        // print(e);
+      }
+    });
   }
 }
 
@@ -83,7 +112,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 // class ErrorHandler implements Exception {
 //   ErrorHandler.handle(dynamic error) {
 //     if (error is DioException) {
-//       // dio error so its an error from response of the API or from dio itself
+      // dio error so its an error from response of the API or from dio itself
 //       _handleError(error);
 //     }
 //   }

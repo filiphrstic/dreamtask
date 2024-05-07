@@ -102,8 +102,13 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         if (response.statusCode == 200) {
           add(FetchCurrentGameDetails(event.gameId));
         }
-      } catch (e) {
-        emit(ErrorGamesState(e.toString()));
+      } on DioException catch (e) {
+        if (e.response != null) {
+          // print(e.response!.data['errors'][0]['message']);
+          emit(ErrorGamesState(
+              'Error ${e.response!.statusCode}: ${e.response!.data['errors'][0]['message']}'));
+        }
+        // print(e);
       }
     });
 
