@@ -38,6 +38,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
 
   _GameDetailsScreenState(this.gameId, this.firstPlayer, this.secondPlayer);
 
+  // ignore: prefer_typing_uninitialized_variables
   late var timer;
   @override
   void initState() {

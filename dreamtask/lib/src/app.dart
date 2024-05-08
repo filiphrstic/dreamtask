@@ -3,6 +3,7 @@ import 'package:dreamtask/src/game_details/game_details_arguments.dart';
 import 'package:dreamtask/src/games/games_screen.dart';
 import 'package:dreamtask/src/login/login_screen.dart';
 import 'package:dreamtask/src/login/registration_screen.dart';
+import 'package:dreamtask/src/rank_list/rank_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -77,6 +78,8 @@ class MyApp extends StatelessWidget {
                     return const LoginScreen();
                   case GamesScreen.routeName:
                     return const GamesScreen();
+                  case RankListScreen.routeName:
+                    return const RankListScreen();
                   case GameDetailsScreen.routeName:
                     GameDetailsArguments gameDetailsArguments =
                         routeSettings.arguments as GameDetailsArguments;

@@ -4,6 +4,7 @@ import 'package:dreamtask/src/games/bloc/games_bloc.dart';
 import 'package:dreamtask/src/games/game_model.dart';
 import 'package:dreamtask/src/login/bloc/login_bloc.dart';
 import 'package:dreamtask/src/login/login_screen.dart';
+import 'package:dreamtask/src/rank_list/rank_list_screen.dart';
 import 'package:dreamtask/src/users/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,7 @@ class GamesScreen extends StatefulWidget {
 }
 
 class _GamesScreenState extends State<GamesScreen> {
+  int currentScreenIndex = 0;
   var selectedStatus = '';
   final gamesBloc = GamesBloc();
   final loginBloc = LoginBloc();
@@ -180,6 +182,19 @@ class _GamesScreenState extends State<GamesScreen> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.format_list_numbered), label: 'Rank list')
             ],
+            onTap: (value) {
+              switch (value) {
+                case 0:
+                  Navigator.pushReplacementNamed(
+                      context, GamesScreen.routeName);
+                case 1:
+                  Navigator.pushReplacementNamed(
+                      context, RankListScreen.routeName);
+              }
+              setState(() {
+                currentScreenIndex = value;
+              });
+            },
           ),
         ),
       ),
